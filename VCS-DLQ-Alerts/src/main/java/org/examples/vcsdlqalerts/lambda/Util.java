@@ -9,22 +9,30 @@ import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumWriter;
 import org.apache.avro.specific.SpecificDatumWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Properties;
 
 public class Util {
-    public static String DATA_FILE_NAME = "data.avro";
-    public static String AVRO_SCHEMA_NAME = "User";
-    public static String SCHEMA_REGISTRY_URL = "http://localhost:8081";
+
+    private static final Logger log = LoggerFactory.getLogger(Util.class);
+    public static final String DATA_FILE_NAME = "VCSDLQ.avro";
+    public static final String AVRO_SCHEMA_NAME = System.getenv("AVRO_SCHEMA_NAME"); //"User";
+    public static final String AVRO_SCHEMA_FILE = System.getenv("AVRO_SCHEMA_FILE"); //"avroSDLQSchema.avsc";
+    public static final String AVRO_SCHEMA_REGISTRY_URL = System.getenv("AVRO_SCHEMA_REGISTRY_URL"); // "http://localhost:8081";
     private static final String SLACK_WEBHOOK_URL = System.getenv("SLACK_WEBHOOK_URL");
-    private static final String SLACK_CHANNEL = "#vcs-dlq-alerts-lambda-test";
+    private static final String SLACK_CHANNEL = System.getenv("SLACK_CHANNEL"); // "#vcs-dlq-alerts-lambda-test";
 
     public static final ObjectWriter OBJECT_WRITER = new ObjectMapper().writer().withDefaultPrettyPrinter();
 
     public static byte[] loadResourceFile(String filename) throws IOException {
-        var classLoader = AvroToJsonConverter.class.getClassLoader();
+        var classLoader = AvroToJsonConverterDraft.class.getClassLoader();
+        log.info(">>> start to load resource file: {}", filename);
         var inputStream = classLoader.getResourceAsStream(filename);
         return inputStream.readAllBytes();
     }
@@ -38,7 +46,11 @@ public class Util {
     }
 
     public static String getSchemeStringFromFile() throws Exception {
-        return byteArrayToString(loadResourceFile("avroScheme.json"));
+        return byteArrayToString(loadResourceFile(AVRO_SCHEMA_FILE));
+    }
+
+    public static Schema getSchemeStringFromFile(String avroSchemeFileName) throws Exception {
+        return getSchemeFromString(byteArrayToString(loadResourceFile(avroSchemeFileName)));
     }
 
     public static String sendToSlack(String message)  {
@@ -63,6 +75,18 @@ public class Util {
         }
     }
 
+    public static Properties loadAppProperties()  {
+        String resourceName = "app.properties";
+        ClassLoader loader = Thread.currentThread().getContextClassLoader();
+        Properties props = new Properties();
+        try(InputStream resourceStream = loader.getResourceAsStream(resourceName)) {
+            props.load(resourceStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return props;
+    }
+
     /**
      * ! Run just in IDE !
      */
@@ -72,7 +96,7 @@ public class Util {
         DatumWriter<GenericRecord> datumWriter = new SpecificDatumWriter<>(schema);
         DataFileWriter<GenericRecord> dataFileWriter = new DataFileWriter<>(datumWriter);
         dataFileWriter.create(schema, new FileOutputStream(
-                AvroToJsonConverter.class.getClassLoader().getResource("").getPath() + "/" + DATA_FILE_NAME));
+                AvroToJsonConverterDraft.class.getClassLoader().getResource("").getPath() + "/" + DATA_FILE_NAME));
 
 
         var genericRecord = new GenericData.Record(schema);

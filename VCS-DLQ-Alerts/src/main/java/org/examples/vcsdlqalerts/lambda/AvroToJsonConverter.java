@@ -7,31 +7,48 @@ import org.apache.avro.file.DataFileStream;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 public class AvroToJsonConverter {
+
+    private static final Logger log = LoggerFactory.getLogger(AvroToJsonConverter.class);
+    private final int avroSchemaVersion;
     private final SchemaRegistryClient client;
+    private final Properties appProperties;
+    public AvroToJsonConverter(Properties appProperties) {
+        this.appProperties = appProperties;
+        var avroSchemaRegistryUrl = System.getenv("AVRO_SCHEMA_REGISTRY_URL");
+        if(avroSchemaRegistryUrl == null) {
+            avroSchemaRegistryUrl = appProperties.getProperty("avro_schema_registry_url");
+        }
+        log.info("avroSchemaRegistryUrl: {}", avroSchemaRegistryUrl);
+        avroSchemaVersion = System.getenv("AVRO_SCHEMA_VERSION") != null ? Integer.parseInt(System.getenv("AVRO_SCHEMA_VERSION")) : 1;
+        this.client = new CachedSchemaRegistryClient(avroSchemaRegistryUrl, 100);
+        //this.client = null;
+        //log.info("client is NULL right now");
+    }
 
     public AvroToJsonConverter() {
-        this.client = new CachedSchemaRegistryClient(Util.SCHEMA_REGISTRY_URL, 100);
+        this(Util.loadAppProperties());
     }
 
-    public void registerSchema(String subjectName, String schemaString) throws Exception {
-        var schema = new Schema.Parser().parse(schemaString);
-        client.register(subjectName, schema);
+    public String convertAvroBytesToString(byte[] avroData) throws Exception {
+        //var schema = getSchema(appProperties.getProperty("avro_schema_name"));
+        var schema = getSchemaFromFile();
+        log.info(">>> schema: {}; \n {}", schema.getFullName(), schema.toString(false));
+        return convertAvroBytesToString(schema, avroData);
     }
 
 
-    public String avroToJson(String schemaName, byte[] avroBinary) throws Exception {
-        var schema = getSchema(schemaName);
-        return convertAvroBytesToString(schema, avroBinary);
-    }
-
-    private String convertAvroBytesToString(Schema schema, byte[] data) throws IOException {
+    public String convertAvroBytesToString(Schema schema, byte[] avroData) throws IOException {
         DatumReader<GenericRecord> datumReader = new GenericDatumReader<>(schema);
-        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(data);
+        log.info(">>> Before getting ByteArrayInputStream from avroData");
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(avroData);
         DataFileStream<GenericRecord> dataFileStream = new DataFileStream<>(byteArrayInputStream, datumReader);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -45,12 +62,13 @@ public class AvroToJsonConverter {
         return stringBuilder.toString();
     }
 
-    private Schema getSchema(String schemaName) {
-        int schemaVersion = 1;
+    public Schema getSchema(String schemaName) {
         boolean returnOnlyLatest = false;
         Schema.Parser parser = new Schema.Parser();
-        return parser.parse(client.getByVersion(schemaName, schemaVersion, returnOnlyLatest).getSchema());
+        return parser.parse(client.getByVersion(schemaName, avroSchemaVersion, returnOnlyLatest).getSchema());
     }
 
-
+    public Schema getSchemaFromFile() throws Exception {
+        return Util.getSchemeFromString( Util.getSchemeStringFromFile());
+    }
 }

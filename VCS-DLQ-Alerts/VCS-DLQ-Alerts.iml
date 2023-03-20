@@ -19,7 +19,6 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.7" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.7" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.21" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
     <orderEntry type="library" name="Maven: org.apache.kafka:kafka-clients:3.4.0" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: com.github.luben:zstd-jni:1.5.2-1" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.lz4:lz4-java:1.8.0" level="project" />
@@ -46,5 +45,7 @@
     <orderEntry type="library" name="Maven: org.jetbrains.kotlin:kotlin-stdlib:1.4.10" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:13.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.26" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:2.0.7" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:2.0.7" level="project" />
   </component>
 </module>

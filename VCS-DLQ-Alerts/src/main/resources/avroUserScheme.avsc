@@ -1,6 +1,7 @@
 {
   "type": "record",
   "name": "User",
+  "namespace": "com.mycompany",
   "fields": [
     {
       "name": "name",
@@ -8,7 +9,7 @@
     },
     {
       "name": "age",
-      "type": "int"
+      "type": "long"
     }
   ]
 }

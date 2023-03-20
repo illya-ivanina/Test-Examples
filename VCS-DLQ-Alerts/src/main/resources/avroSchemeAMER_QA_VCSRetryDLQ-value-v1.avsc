@@ -1,0 +1,152 @@
+{
+  "doc": "Verified Customer Sales Transaction - The key is type-number, where type is [ RECEIPT, ORDER ] and number is the order number or sales receipt number.",
+  "fields": [
+    {
+      "doc": "Event UUID",
+      "name": "eventUUID",
+      "type": {
+        "logicalType": "uuid",
+        "type": "string"
+      }
+    },
+    {
+      "doc": "Event Timestamp",
+      "name": "eventTimestamp",
+      "type": {
+        "logicalType": "timestamp-millis",
+        "type": "long"
+      }
+    },
+    {
+      "doc": "Event Type [ ADDED, REMOVED, ADJUSTED ]",
+      "name": "eventType",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "doc": "Bonus Period (in the form YYYY-MM)",
+      "name": "bonusPeriod",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "doc": "3-Character ISO Country [ USA, CAN, DOM, ARG, BRA, CHL, COL, URY, MEX, VEN, HND, GTM, CRI, SLV, PAN ]",
+      "name": "country",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "default": 0,
+      "doc": "Sales Amount",
+      "name": "transactionAmount",
+      "type": "double"
+    },
+    {
+      "doc": "Currency [ USD, CAD, DOP ]",
+      "name": "transactionCurrency",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "doc": "Buyer Number",
+      "name": "buyerAccountNumber",
+      "type": {
+        "avro.java.string": "String",
+        "type": "string"
+      }
+    },
+    {
+      "default": null,
+      "doc": "Sponsor Account Number",
+      "name": "sponsorAccountNumber",
+      "type": [
+        "null",
+        {
+          "avro.java.string": "String",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "default": null,
+      "doc": "Volume Account Number",
+      "name": "volumeAccountNumber",
+      "type": [
+        "null",
+        {
+          "avro.java.string": "String",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "default": null,
+      "doc": "Metadata",
+      "name": "metadata",
+      "type": [
+        "null",
+        {
+          "doc": "MetaData",
+          "fields": [
+            {
+              "default": null,
+              "doc": "Source Event",
+              "name": "sourceEvent",
+              "type": [
+                "null",
+                {
+                  "doc": "Source Event",
+                  "fields": [
+                    {
+                      "default": null,
+                      "doc": "Source Topic",
+                      "name": "topic",
+                      "type": [
+                        "null",
+                        {
+                          "avro.java.string": "String",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    {
+                      "doc": "Source Event Type",
+                      "name": "type",
+                      "type": {
+                        "avro.java.string": "String",
+                        "type": "string"
+                      }
+                    },
+                    {
+                      "doc": "Source Event Key",
+                      "name": "key",
+                      "type": {
+                        "avro.java.string": "String",
+                        "type": "string"
+                      }
+                    }
+                  ],
+                  "name": "SourceEvent",
+                  "type": "record"
+                }
+              ]
+            }
+          ],
+          "name": "MetaData",
+          "type": "record"
+        }
+      ]
+    }
+  ],
+  "name": "VcsTransaction",
+  "namespace": "com.amway.ana.avro",
+  "type": "record"
+}
