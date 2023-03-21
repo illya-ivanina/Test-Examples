@@ -1,6 +1,8 @@
-const path = require('path')
-const { Kafka } = require('kafkajs')
-const { SchemaRegistry, SchemaType, avdlToAVSCAsync } = require('@kafkajs/confluent-schema-registry')
+
+const { Kafka } = require('kafkajs');
+const { SchemaRegistry } = require('@kafkajs/confluent-schema-registry');
+const sendSlackNotification = require('./sendSlackNotification');
+
 
 const kafka = new Kafka({
     brokers: ['localhost:9092'],
@@ -21,24 +23,12 @@ const consume = async () => {
             const value = await registry.decode(message.value)
             console.log({ key, value })
             console.log({ "metadata::sourceEvent": value['metadata'] })
+            sendSlackNotification(value)
+                .then(r => console.log(r))
+                .catch(e => console.log(e));
         },
     })
 }
 
-
-/*const consume = async () => {
-    const schema = await avdlToAVSCAsync(path.join(__dirname, 'avroSDLQSchema.avsc'))
-    const { id } = await registry.register({ type: SchemaType.AVRO, schema: JSON.stringify(schema) })
-    await consumer.connect()
-    await consumer.subscribe({ topic: topic })
-    await consumer.run({
-        eachMessage: async ({ topic, partition, message }) => {
-            const decodedMessage = {
-                ...message,
-                value: await registry.decode(message.value)
-            }
-            console.log(`received message: ${decodedMessage.value}`)
-        },
-    })
-}*/
 module.exports = consume
+

@@ -2,7 +2,8 @@
   "name": "vcsdlqalerts",
   "version": "1.0.0",
   "description": "VCS-DLQ-Alerts Kafka consumer",
-  "main": "index.js",
+  "main": "index.mjs",
+  "type": "commonjs",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
