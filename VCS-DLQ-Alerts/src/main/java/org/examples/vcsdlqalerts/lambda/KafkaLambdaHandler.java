@@ -54,12 +54,12 @@ public class KafkaLambdaHandler implements RequestHandler<KafkaEvent, Void> {
     private void deserializeAndSend(Deserializer deserializer, KafkaEvent kafkaEvent) {
         kafkaEvent.getRecords().forEach((key, value) -> value.forEach(v -> {
             var data = new String(base64Decode(v));
-            log.info(String.format(">>> DESERIALIZATION >>>  \nKEY: %s; \nRaw value: %s; \nbase64Decode  value: %s",
+            log.info(String.format("DESERIALIZATION - KEY: %s; \nDESERIALIZATION - Raw value: %s; \n DESERIALIZATION - base64Decode  value: %s",
                     key, v, data));
             try {
                 GenericRecord rec = (GenericRecord) deserializer.deserialize(v.getValue(), base64Decode(v));
                 data = rec.toString();
-                log.info(">>> Deserialized record: " + rec);
+                log.info("DESERIALIZATION - record after deserializer.deserialize: " + rec);
             } catch (Exception e) {
                 log.error("Error deserializing record", e);
             }

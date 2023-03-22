@@ -24,11 +24,12 @@ import java.util.Properties;
  */
 public class KafkaConsumerTestDemo {
     private static final Logger log = LoggerFactory.getLogger(KafkaConsumerTestDemo.class);
-
     private final KafkaConsumer<String, GenericRecord> consumer;
+    private final SlackHelper slackHelper;
 
     public KafkaConsumerTestDemo() {
         this.consumer = new KafkaConsumer<>(getKafkaProperties());
+        this.slackHelper = new SlackHelper();
     }
 
     private Properties getKafkaProperties() {
@@ -66,7 +67,14 @@ public class KafkaConsumerTestDemo {
             for (ConsumerRecord<String, GenericRecord> record : records) {
                 var value = record.value();
                 log.info(">>> Value: " + value);
-                Util.sendToSlack(value.toString());
+                slackHelper.sendMessage(
+                        MessageDTO.builder()
+                                .message(value.toString())
+                                .offset(record.offset())
+                                .partition(record.partition())
+                                .topic(record.topic())
+                                .build()
+                );
             }
         }
     }

@@ -91,6 +91,7 @@ public class SlackHelper {
 
         try {
             log.info("Sending message to Slack channel " + Config.getProperty("SLACK_CHANNEL"));
+            log.info("Sending message to Slack URL " + Config.getProperty("SLACK_WEBHOOK_URL"));
             slack.send(
                     Config.getProperty("SLACK_WEBHOOK_URL"),
                     Payload.builder()
