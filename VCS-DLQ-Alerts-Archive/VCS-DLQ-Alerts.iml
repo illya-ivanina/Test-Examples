@@ -125,9 +125,6 @@
     <orderEntry type="library" scope="RUNTIME" name="Maven: org.snakeyaml:snakeyaml-engine:2.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.api.grpc:proto-google-common-protos:2.7.4" level="project" />
     <orderEntry type="library" name="Maven: com.google.jimfs:jimfs:1.1" level="project" />
-    <orderEntry type="library" name="Maven: com.slack.api:slack-api-client:1.28.0" level="project" />
-    <orderEntry type="library" name="Maven: com.slack.api:slack-api-model:1.28.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.10.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:4.9.1" level="project" />
     <orderEntry type="library" name="Maven: com.squareup.okio:okio:2.8.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.18.26" level="project" />

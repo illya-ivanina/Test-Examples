@@ -24,7 +24,7 @@ public class AvroToJsonConverter {
         this.appProperties = appProperties;
         var avroSchemaRegistryUrl = System.getenv("AVRO_SCHEMA_REGISTRY_URL");
         if(avroSchemaRegistryUrl == null) {
-            avroSchemaRegistryUrl = appProperties.getProperty("avro_schema_registry_url");
+            avroSchemaRegistryUrl = appProperties.getProperty("SCHEMA_REGISTRY_HOST");
         }
         log.info("avroSchemaRegistryUrl: {}", avroSchemaRegistryUrl);
         avroSchemaVersion = System.getenv("AVRO_SCHEMA_VERSION") != null ? Integer.parseInt(System.getenv("AVRO_SCHEMA_VERSION")) : 1;

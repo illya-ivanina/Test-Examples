@@ -55,11 +55,6 @@
             <artifactId>schema-registry-serde</artifactId>
             <version>1.1.15</version>
         </dependency>
-        <dependency>
-            <groupId>com.slack.api</groupId>
-            <artifactId>slack-api-client</artifactId>
-            <version>1.28.0</version>
-        </dependency>
 
 
         <dependency>
