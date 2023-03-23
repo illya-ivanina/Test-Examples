@@ -17,6 +17,9 @@ import org.slf4j.LoggerFactory;
 import java.util.Base64;
 import java.util.Map;
 
+/**
+ *
+ */
 public class KafkaLambdaHandler implements RequestHandler<KafkaEvent, Void> {
     private static final Logger log = LoggerFactory.getLogger(KafkaLambdaHandler.class);
 
@@ -61,7 +64,8 @@ public class KafkaLambdaHandler implements RequestHandler<KafkaEvent, Void> {
                 data = rec.toString();
                 log.info("DESERIALIZATION - record after deserializer.deserialize: " + rec);
             } catch (Exception e) {
-                log.error("Error deserializing record", e);
+                data = new String(base64Decode(v));
+                log.error("Error deserializing record. Trying just base64Decode", e);
             }
             var slackMessage = MessageDTO.builder()
                     .topic(Config.getProperty("KAFKA_TOPIC"))

@@ -89,7 +89,9 @@
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
         </dependency>
-        <dependency>
+
+        <!-- AWS recommendation. TODO: try without those dependencies (jaxb's) -->
+        <!--<dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
             <version>2.3.1</version>
@@ -103,7 +105,7 @@
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-core</artifactId>
             <version>4.0.2</version>
-        </dependency>
+        </dependency>-->
 
     </dependencies>
 

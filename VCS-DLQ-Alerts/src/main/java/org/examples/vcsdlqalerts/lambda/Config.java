@@ -13,6 +13,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * Class for handling and preparing properties and variables.
+ * It handles AWS KMS encoded data.
+ * To avoid AWS KMS decoding set environment variable `PROPERTY_ENCODED` to `false` (string).
+ * Values from environment have high priority over variables from property file.
+ * In current implementation using one property file.
+ *
+ * TODO: figure out a solution to check if var encrypted or not and use AWS KMS decryption just for encrypted value.
+ *
+ */
 public class Config {
     private static final Logger log = LoggerFactory.getLogger(Config.class);
     private static final String DEFAULT_CONFIG_FILE = "app.properties";
@@ -35,6 +45,11 @@ public class Config {
         }
     }
 
+    /**
+     * Public method for getting property or env var
+     * @param key String
+     * @return String
+     */
     public static String getProperty(String key) {
         var value = properties.getProperty(key);
         if (value != null && !value.trim().isEmpty()) {
@@ -45,7 +60,8 @@ public class Config {
 
     private static String getFromEnvAndDecryptVariable(String envName) {
         var value = System.getenv(envName);
-        if (System.getenv("PROFILE") != null && System.getenv("PROFILE").equals("local")) {
+        if (System.getenv("PROPERTY_ENCODED") != null &&
+                System.getenv("PROPERTY_ENCODED").equalsIgnoreCase("false")) {
             return value;
         }
         if (value == null || value.trim().isEmpty()) {

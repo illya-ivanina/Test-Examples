@@ -16,6 +16,24 @@ import java.util.List;
 import java.util.Properties;
 
 /**
+ * Simple DEMO Kafka consumer.
+ * Used in Main class and can be tested simply run Main::main method.
+ * Before run this consumer be sure you have sepupped all env vars:
+ *
+ * CLIENT_ID=vcsTransactionsDLQToSlackNodeJs-Local-Test
+ * GROUP_ID=test-local-group-id
+ * KAFKA_BOOTSTRAP_SERVERS=** check documentation ***
+ * KAFKA_PASSWORD=**** secret ****
+ * KAFKA_TOPIC=AMER_QA_VCSRetryDLQ
+ * KAFKA_USER=*** secret ****
+ * PROFILE=local
+ * SCHEMA_REGISTRY_HOST=*** check documentation ***
+ * SCHEMA_REGISTRY_PASSWORD=*** secret ****
+ * SCHEMA_REGISTRY_USER=JHDTUUVBFTDKRTVA;
+ * SLACK_CHANNEL=#vcs-dlq-alerts-lambda-test;
+ * SLACK_WEBHOOK_URL=*** secret ****
+ * PROPERTY_ENCODED=false
+ *
  * AUTO_OFFSET_RESET_CONFIG:
  * earliest: automatically reset the offset to the earliest offset
  * latest: automatically reset the offset to the latest offset

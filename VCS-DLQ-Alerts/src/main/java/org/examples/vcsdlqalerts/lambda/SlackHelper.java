@@ -18,6 +18,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * SlackHelper used for sending formatted message to Slack.
+ * Can be used WebHook or Slack API.
+ * The format and the general information is hardcoded.
+ * It means that this class can be used just for sending prepared MessageDTO objects.
+ */
 public class SlackHelper {
     private static final Logger log = LoggerFactory.getLogger(SlackHelper.class);
     private final MethodsClient methodsClient;
@@ -79,6 +85,8 @@ public class SlackHelper {
                 .build());
 
         /*
+        // The next commented code can be used for sending message with Slack API instead of using WebHook
+        //
         ChatPostMessageRequest request = ChatPostMessageRequest.builder()
                 .channel(Config.getProperty("SLACK_CHANNEL"))
                 .blocks(message)
@@ -89,6 +97,7 @@ public class SlackHelper {
             throw new RuntimeException(e);
         }*/
 
+        // Sending message with WebHook
         try {
             log.info("Sending message to Slack channel " + Config.getProperty("SLACK_CHANNEL"));
             log.info("Sending message to Slack URL " + Config.getProperty("SLACK_WEBHOOK_URL"));
